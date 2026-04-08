@@ -28,8 +28,7 @@ npm install @streamlogia/javascript-sdk
 import { LogIngestorClient } from '@streamlogia/javascript-sdk'
 
 const client = new LogIngestorClient({
-  baseURL:   'https://api.streamlogia.com',
-  token:     process.env.LOGINGESTOR_TOKEN,
+  apiKey:    process.env.LOGINGESTOR_API_KEY,
   projectId: process.env.LOGINGESTOR_PROJECT_ID,
   source:    'my-service',
 })
@@ -158,9 +157,8 @@ Place this at the root of your Next.js project as `middleware.js`. It runs on th
 // middleware.js
 import { NextResponse } from 'next/server'
 
-const INGESTOR_URL = process.env.LOGINGESTOR_BASE_URL
-const TOKEN        = process.env.LOGINGESTOR_TOKEN
-const PROJECT_ID   = process.env.LOGINGESTOR_PROJECT_ID
+const API_KEY    = process.env.LOGINGESTOR_API_KEY
+const PROJECT_ID = process.env.LOGINGESTOR_PROJECT_ID
 
 export async function middleware(request) {
   const entry = {
@@ -178,9 +176,9 @@ export async function middleware(request) {
   }
 
   // Fire-and-forget — never let logging block the response
-  fetch(`${INGESTOR_URL}/v1/ingest`, {
+  fetch('https://api.streamlogia.com/v1/ingest', {
     method:  'POST',
-    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
     body:    JSON.stringify([entry]),
   }).catch(() => {})
 
@@ -198,29 +196,28 @@ See [`examples/nextjs-middleware.js`](examples/nextjs-middleware.js) for the ful
 
 ```js
 const client = new LogIngestorClient({
-  baseURL:        'https://api.streamlogia.com',
-  token:          process.env.LOGINGESTOR_TOKEN,
-  projectId:      process.env.LOGINGESTOR_PROJECT_ID,
-  source:         'order-service',
-  batchSize:      50,
+  apiKey:          process.env.LOGINGESTOR_API_KEY,
+  projectId:       process.env.LOGINGESTOR_PROJECT_ID,
+  source:          'order-service',
+  batchSize:       50,
   flushIntervalMs: 10_000,
-  fetch:          customFetchFn,      // optional: custom fetch implementation
-  onError:        (err) => { ... },   // optional: called when an ingest request fails
-  console:        true,               // optional: mirror every log to the console
+  fetch:           customFetchFn,      // optional: custom fetch implementation
+  onError:         (err) => { ... },   // optional: called when an ingest request fails
+  console:         true,               // optional: mirror every log to the console
 })
 ```
 
-| Option            | Default                | Description                                          |
-| ----------------- | ---------------------- | ---------------------------------------------------- |
-| `baseURL`         | —                      | Base URL of the ingestor API (required)              |
-| `token`           | —                      | JWT bearer token (required)                          |
-| `projectId`       | —                      | Project UUID (required)                              |
-| `source`          | `"unknown"`            | Default `source` field on every log entry            |
-| `batchSize`       | `1`                    | Flush automatically after accumulating `n` entries   |
-| `flushIntervalMs` | `5000`                 | Background flush interval in milliseconds            |
-| `fetch`           | `globalThis.fetch`     | Custom fetch implementation                          |
-| `onError`         | `console.error`        | Called when an ingest HTTP request fails             |
-| `console`         | `true`                 | Mirror every log entry to the console as well        |
+| Option            | Default                         | Description                                          |
+| ----------------- | ------------------------------- | ---------------------------------------------------- |
+| `apiKey`          | —                               | API key (required)                                   |
+| `projectId`       | —                               | Project UUID (required)                              |
+| `baseURL`         | `"https://api.streamlogia.com"` | Override the ingestor API base URL                   |
+| `source`          | `"unknown"`                     | Default `source` field on every log entry            |
+| `batchSize`       | `1`                             | Flush automatically after accumulating `n` entries   |
+| `flushIntervalMs` | `5000`                          | Background flush interval in milliseconds            |
+| `fetch`           | `globalThis.fetch`              | Custom fetch implementation                          |
+| `onError`         | `console.error`                 | Called when an ingest HTTP request fails             |
+| `console`         | `true`                          | Mirror every log entry to the console as well        |
 
 ## Graceful Shutdown
 
@@ -283,7 +280,7 @@ Creates the client and starts the background flush timer.
 Run the Express example:
 
 ```sh
-LOGINGESTOR_TOKEN=<token> LOGINGESTOR_PROJECT_ID=<id> node examples/express-app.js
+LOGINGESTOR_API_KEY=<key> LOGINGESTOR_PROJECT_ID=<id> node examples/express-app.js
 ```
 
 ## License
