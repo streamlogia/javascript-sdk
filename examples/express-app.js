@@ -2,7 +2,7 @@
  * Example Express app using the Log Ingestor SDK.
  *
  * Install deps:  npm install express winston winston-transport
- * Run:           LOGINGESTOR_TOKEN=... LOGINGESTOR_PROJECT_ID=... node express-app.js
+ * Run:           LOGINGESTOR_API_KEY=... LOGINGESTOR_PROJECT_ID=... node express-app.js
  */
 
 import express from "express";
@@ -12,8 +12,7 @@ import { LogIngestorClient } from "../logingestor.js";
 
 // ── 1. Create the client ─────────────────────────────────────────────────────
 const logs = new LogIngestorClient({
-  baseURL: "https://api.streamlogia.com",
-  token: process.env.LOGINGESTOR_TOKEN,
+  apiKey: process.env.LOGINGESTOR_API_KEY,
   projectId: process.env.LOGINGESTOR_PROJECT_ID,
   source: "payment-service",
 });
@@ -78,6 +77,10 @@ app.get("/payments/:id", async (req, res) => {
   res.json({ id, status: "completed" });
 });
 
-app.listen(3000, () => {
-  logger.info("server started", { port: 3000 });
+const server = app.listen(4000, () => {
+  logger.info("server started", { port: 4000 });
+});
+
+server.on("error", (err) => {
+  console.error("Server error:", err);
 });

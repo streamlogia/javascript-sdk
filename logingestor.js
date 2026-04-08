@@ -8,8 +8,7 @@
  * import { LogIngestorClient } from './logingestor.js'
  *
  * const client = new LogIngestorClient({
- *   baseURL: 'https://logs.example.com',
- *   token: process.env.LOGINGESTOR_TOKEN,
+ *   apiKey: process.env.LOGINGESTOR_API_KEY,
  *   projectId: process.env.LOGINGESTOR_PROJECT_ID,
  *   source: 'payment-service',
  * })
@@ -50,8 +49,8 @@ function pinoLevel(n) {
 export class LogIngestorClient {
   /**
    * @param {object} opts
-   * @param {string} opts.baseURL       – e.g. 'https://logs.example.com'
-   * @param {string} opts.token         – JWT bearer token
+   * @param {string} [opts.baseURL]     – override the default API base URL
+   * @param {string} opts.apiKey        – API key
    * @param {string} opts.projectId     – UUID of the project
    * @param {string} [opts.source]      – default source tag (default: 'unknown')
    * @param {number} [opts.batchSize]   – flush when queue reaches this size (default: 1, sends every entry immediately)
@@ -61,8 +60,8 @@ export class LogIngestorClient {
    * @param {boolean}  [opts.console]   – mirror every log to the console as well (default: true)
    */
   constructor({
-    baseURL,
-    token,
+    baseURL = 'https://api.streamlogia.com',
+    apiKey,
     projectId,
     source = 'unknown',
     batchSize = 1,
@@ -72,7 +71,7 @@ export class LogIngestorClient {
     console: mirrorConsole = true,
   }) {
     this._baseURL = baseURL.replace(/\/$/, '')
-    this._token = token
+    this._apiKey = apiKey
     this._projectId = projectId
     this._source = source
     this._batchSize = batchSize
@@ -112,7 +111,7 @@ export class LogIngestorClient {
     const resp = await this._fetch(`${this._baseURL}/v1/ingest`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this._token}`,
+        'Authorization': `Bearer ${this._apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(entries),
@@ -244,7 +243,11 @@ export class LogIngestorClient {
     const self = this
     return class LogIngestorTransport extends Transport {
       log(info, callback) {
-        const { level, message, [Symbol.for('splat')]: _splat, ...meta } = info
+        const { level, message, [Symbol.for('splat')]: _splat, ...rest } = info
+        // Strip Winston's internal Symbol-keyed properties from meta
+        const meta = Object.fromEntries(
+          Object.entries(rest).filter(([k]) => typeof k === 'string')
+        )
         self._enqueue(WINSTON_LEVEL_MAP[level] ?? 'INFO', message, { meta })
         callback()
       }
