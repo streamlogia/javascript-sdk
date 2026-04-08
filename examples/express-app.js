@@ -8,7 +8,7 @@
 import express from "express";
 import winston from "winston";
 import Transport from "winston-transport";
-import { LogIngestorClient } from "../logingestor.js";
+import { LogIngestorClient } from "@streamlogia/javascript-sdk";
 
 // ── 1. Create the client ─────────────────────────────────────────────────────
 const logs = new LogIngestorClient({
