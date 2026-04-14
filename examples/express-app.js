@@ -2,7 +2,7 @@
  * Example Express app using the Log Ingestor SDK.
  *
  * Install deps:  npm install express winston winston-transport
- * Run:           LOGINGESTOR_API_KEY=... LOGINGESTOR_PROJECT_ID=... node express-app.js
+ * Run:           STREAMLOGIA_API_KEY=... STREAMLOGIA_PROJECT_ID=... node express-app.js
  */
 
 import express from "express";
@@ -12,8 +12,8 @@ import { LogIngestorClient } from "@streamlogia/javascript-sdk";
 
 // ── 1. Create the client ─────────────────────────────────────────────────────
 const logs = new LogIngestorClient({
-  apiKey: process.env.LOGINGESTOR_API_KEY,
-  projectId: process.env.LOGINGESTOR_PROJECT_ID,
+  apiKey: process.env.STREAMLOGIA_API_KEY,
+  projectId: process.env.STREAMLOGIA_PROJECT_ID,
   source: "payment-service",
 });
 

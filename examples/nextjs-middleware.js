@@ -4,7 +4,7 @@
  * Place this file at the root of your Next.js project as `middleware.js`.
  * It fires on every matched request and logs one entry to the ingestor.
  *
- * Required env vars: LOGINGESTOR_API_KEY, LOGINGESTOR_PROJECT_ID
+ * Required env vars: STREAMLOGIA_API_KEY, STREAMLOGIA_PROJECT_ID
  *
  * Note: Next.js middleware runs on the Edge Runtime, so use `fetch` directly
  * (the SDK's built-in fetch works fine there).
@@ -13,8 +13,8 @@
 import { NextResponse } from "next/server";
 
 const INGESTOR_URL = 'https://api.streamlogia.com';
-const API_KEY = process.env.LOGINGESTOR_API_KEY;
-const PROJECT_ID = process.env.LOGINGESTOR_PROJECT_ID;
+const API_KEY = process.env.STREAMLOGIA_API_KEY;
+const PROJECT_ID = process.env.STREAMLOGIA_PROJECT_ID;
 
 export async function middleware(request) {
   const start = Date.now();

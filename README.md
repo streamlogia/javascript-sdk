@@ -28,8 +28,8 @@ npm install @streamlogia/javascript-sdk
 import { LogIngestorClient } from '@streamlogia/javascript-sdk'
 
 const client = new LogIngestorClient({
-  apiKey:    process.env.LOGINGESTOR_API_KEY,
-  projectId: process.env.LOGINGESTOR_PROJECT_ID,
+  apiKey:    process.env.STREAMLOGIA_API_KEY,
+  projectId: process.env.STREAMLOGIA_PROJECT_ID,
   source:    'my-service',
 })
 
@@ -157,8 +157,8 @@ Place this at the root of your Next.js project as `middleware.js`. It runs on th
 // middleware.js
 import { NextResponse } from 'next/server'
 
-const API_KEY    = process.env.LOGINGESTOR_API_KEY
-const PROJECT_ID = process.env.LOGINGESTOR_PROJECT_ID
+const API_KEY    = process.env.STREAMLOGIA_API_KEY
+const PROJECT_ID = process.env.STREAMLOGIA_PROJECT_ID
 
 export async function middleware(request) {
   const entry = {
@@ -196,8 +196,8 @@ See [`examples/nextjs-middleware.js`](examples/nextjs-middleware.js) for the ful
 
 ```js
 const client = new LogIngestorClient({
-  apiKey:          process.env.LOGINGESTOR_API_KEY,
-  projectId:       process.env.LOGINGESTOR_PROJECT_ID,
+  apiKey:          process.env.STREAMLOGIA_API_KEY,
+  projectId:       process.env.STREAMLOGIA_PROJECT_ID,
   source:          'order-service',
   batchSize:       50,
   flushIntervalMs: 10_000,
@@ -280,7 +280,7 @@ Creates the client and starts the background flush timer.
 Run the Express example:
 
 ```sh
-LOGINGESTOR_API_KEY=<key> LOGINGESTOR_PROJECT_ID=<id> node examples/express-app.js
+STREAMLOGIA_API_KEY=<key> STREAMLOGIA_PROJECT_ID=<id> node examples/express-app.js
 ```
 
 ## License

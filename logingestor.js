@@ -8,8 +8,8 @@
  * import { LogIngestorClient } from './logingestor.js'
  *
  * const client = new LogIngestorClient({
- *   apiKey: process.env.LOGINGESTOR_API_KEY,
- *   projectId: process.env.LOGINGESTOR_PROJECT_ID,
+ *   apiKey: process.env.STREAMLOGIA_API_KEY,
+ *   projectId: process.env.STREAMLOGIA_PROJECT_ID,
  *   source: 'payment-service',
  * })
  *
